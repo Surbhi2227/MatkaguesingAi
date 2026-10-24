@@ -1,76 +1,59 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KALYAN PANEL - ORIGINAL STYLE</title>
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KALYAN PANEL - V7 CANONICAL 0-LAST VERTICAL</title>
 <style>
-body{margin:0;font-family:Arial;background:#f5e6c8}
-.top{background:#b91c4c;color:#fff;display:flex;gap:18px;padding:10px;font-weight:bold}
-h2{background:#b91c4c;color:#fff;text-align:center;margin:0;padding:12px;font-size:22px}
-.filter{background:#fff8dc;padding:12px;margin:10px;border:2px solid #b91c4c;border-radius:10px}
-.filter input,.filter select{width:100%;padding:10px;border-radius:6px;border:1px solid #999;margin:5px 0}
+body{margin:0;font-family:Arial;background:#fff3d6}
+.top{background:#c2185b;color:#fff;display:flex;gap:16px;padding:10px;font-weight:bold;font-size:14px}
+h2{background:#c2185b;color:#fff;text-align:center;margin:0;padding:14px;font-size:22px;letter-spacing:1px}
+.filter{background:#fff;padding:12px;margin:10px;border:2px solid #c2185b;border-radius:12px}
+.filter input,.filter select{width:100%;padding:11px;border-radius:8px;border:1px solid #999;margin:6px 0;font-size:15px;box-sizing:border-box}
+.note{background:#fff3cd;padding:10px;border-radius:8px;font-size:12px;margin-top:8px;border:1px solid #ffc107}
 table{width:100%;border-collapse:collapse;background:#fff}
-th{background:#b91c4c;color:#fff;padding:8px 2px;font-size:12px}
-td{border:1px solid #999;padding:2px 0;text-align:center;vertical-align:middle;min-width:60px}
-td.week{background:#e9d5ff;font-weight:bold;font-size:10px;min-width:48px}
-.cell{display:flex;justify-content:center;align-items:center;gap:3px}
-.pana-v{display:flex;flex-direction:column;font-size:12px;line-height:1.1}
-.jodi{font-weight:bold;font-size:16px;padding:0 2px;color:#000}
-.jodi.red,.pana-v.red{color:#fff;background:#ff0000;border-radius:3px}
-.note{font-size:11px;background:#fef3c7;padding:8px;border-radius:6px;margin-top:8px}
+th{background:#c2185b;color:#fff;padding:8px 2px;font-size:12px;position:sticky;top:0;z-index:2}
+td{border:1px solid #bbb;padding:2px 0;text-align:center;min-width:62px;vertical-align:middle}
+td.week{background:#f3e5f5;font-weight:bold;font-size:11px;min-width:60px;line-height:1.1}
+.cell3{display:flex;flex-direction:row;justify-content:center;align-items:center;gap:4px;min-height:52px}
+.col{display:flex;flex-direction:column;line-height:1.15;font-size:13px;font-weight:500}
+.jodi-col{font-weight:900;font-size:16px;min-width:28px;text-align:center}
+.jodi-col.red{background:#ff0000;color:#fff;border-radius:4px;padding:2px 4px}
+.col.red{background:#ff0000;color:#fff;border-radius:4px}
+.col span{display:block;padding:0 1px}
 </style></head><body>
-<div class="top"><span>Result</span><span style="border-bottom:3px solid yellow">Charts</span><span>Guessing</span><span>Forum</span><span>VIP</span></div>
+<div class="top"><span>Result</span><span style="border-bottom:3px solid #ffeb3b">Charts</span><span>Guessing</span><span>Forum</span><span>VIP</span></div>
 <h2>KALYAN PANEL CHART</h2>
 <div class="filter">
-<b>YOUR INVENTION SEARCH</b>
+<b>YOUR INVENTION - V7 FIXED</b>
 <input id="q" value="12" placeholder="Find: 12 (CP), 123 (pana), 51 (jodi)" oninput="render()">
 <select id="hl" onchange="render()">
 <option value="none">Nothing</option>
 <option value="cp" selected>CP Pana List (10 per CP) - RED</option>
-<option value="panafamily">Family of Pana (FM-35)</option>
+<option value="panafamily">Family of Pana</option>
 <option value="start">Start Digit</option>
 <option value="mid">Middle Digit</option>
 <option value="end">End Digit</option>
 </select>
-<label><input type="checkbox" id="only" onchange="render()"> Only weeks with a match</label>
-<div class="note"><b>V6 CANONICAL:</b> 487->478, 738->378. Vertical layout like screenshot: Left 3 digits (open) + Middle Jodi + Right 3 digits (close). Try 12 = 112,122 etc RED</div>
+<div style="display:flex;gap:8px"><select id="show" onchange="render()" style="flex:1"><option>All weeks</option><option>Last 4 weeks</option><option>Last 10 weeks</option></select>
+<label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="only" onchange="render()" style="width:auto"> Only match</label></div>
+<div class="note"><b>V7 FIXED:</b><br>- Old: 012, 046, 049 (0 in front) WRONG<br>- New: 120, 460, 490 (0 at last) CORRECT canonical 1-2-3...-9-0<br>- Vertical layout: 7 / 9 / 9 | 51 | 1 / 5 / 5 = 799 / 51 / 155 like screenshot</div>
 </div>
-<div style="overflow:auto"><table><thead><tr><th>2012</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody id="body"></tbody></table></div>
+<div style="overflow:auto"><table><thead><tr><th>Date</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody id="body"></tbody></table></div>
 <script>
-function canonical(p){return p.split('').sort().join('');}
-function ank(p){return (parseInt(p[0])+parseInt(p[1])+parseInt(p[2]))%10;}
-function randPana(){let a=Math.floor(Math.random()*10),b=Math.floor(Math.random()*10),c=Math.floor(Math.random()*10);if(a===b&&b===c)return randPana();return canonical(''+a+b+c);}
-
-const CP_MAP={'11':['112','118','119','110','101','011'].map(canonical),'12':['112','122','123','124','125','126','127','128','129','120'].map(canonical),'13':['113','133','134','135','136','137','138','139','130','103'].map(canonical)};
-const FM={'123':['123','128','137','178','236','268','367','678'].map(canonical)};
-
-const weeks=[];let sd=new Date('2012-12-31');
-for(let w=0;w<20;w++){let d=new Date(sd);d.setDate(d.getDate()+w*7);let row={week:d.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}),days:[]};for(let i=0;i<6;i++){
-let open=(w==1&&i==2)?canonical('123'):randPana();
-let close=randPana();
-let jodi=''+ank(open)+ank(close);
-row.days.push({open:canonical(open),close:canonical(close),jodi});}weeks.push(row);}
-
-function render(){
- const q=document.getElementById('q').value.trim();const hl=document.getElementById('hl').value;const only=document.getElementById('only').checked;
- let html='';weeks.forEach((w,wi)=>{
-  let tds=w.days.map(c=>{
-   let match=!q||c.open.includes(q)||c.close.includes(q)||c.jodi===q||(CP_MAP[q]&&CP_MAP[q].includes(c.open))||(CP_MAP[q]&&CP_MAP[q].includes(c.close));
-   if(only&&q&&!match) return null;
-   let redOpen=false,redClose=false,redJodi=false;
-   if(hl==='cp'&&q&&CP_MAP[q]){redOpen=CP_MAP[q].includes(c.open);redClose=CP_MAP[q].includes(c.close);}
-   if(hl==='panafamily'&&q){let cq=canonical(q);let fam=FM[cq]||[];redOpen=fam.includes(c.open);redClose=fam.includes(c.close);}
-   if(hl==='start'){redOpen=c.open[0]===q[0];redClose=c.close[0]===q[0];}
-   if(hl==='mid'){redOpen=c.open[1]===q[0];redClose=c.close[1]===q[0];}
-   if(hl==='end'){redOpen=c.open[2]===q[0];redClose=c.close[2]===q[0];}
-   if(q&&c.jodi===q) redJodi=true;
-   return `<td><div class="cell">
-   <div class="pana-v ${redOpen?'red':''}"><span>${c.open[0]}</span><span>${c.open[1]}</span><span>${c.open[2]}</span></div>
-   <div class="jodi ${redJodi||redOpen||redClose?'red':''}">${c.jodi}</div>
-   <div class="pana-v ${redClose?'red':''}"><span>${c.close[0]}</span><span>${c.close[1]}</span><span>${c.close[2]}</span></div>
-   </div></td>`;
-  }).filter(x=>x!==null);
-  if(only&&tds.length===0) return;
-  html+=`<tr><td class="week">${w.week}</td>${tds.join('')}</tr>`;
- });
- document.getElementById('body').innerHTML=html;
+function canonical(p){
+  if(!p) return p;
+  p=p.toString();
+  if(p.length!==3) return p;
+  let digits=p.split('').map(d=>parseInt(d));
+  digits.sort((a,b)=>{let va=a===0?10:a;let vb=b===0?10:b;return va-vb;});
+  return digits.join('');
 }
+function ank(p){p=canonical(p);let s=parseInt(p[0])+parseInt(p[1])+parseInt(p[2]);return s%10;}
+function randCanonical(){let a=Math.floor(Math.random()*10);let b=Math.floor(Math.random()*10);let c=Math.floor(Math.random()*10);if(a===b && b===c && Math.random()<0.9) return randCanonical();return canonical(''+a+b+c);}
+function toCan(arr){return [...new Set(arr.map(canonical))];}
+const CP_MAP={'11':toCan(['112','121','211','110','101','011','119','191','911','118']),'12':toCan(['112','122','123','124','125','126','127','128','129','120']),'13':toCan(['113','133','134','135','136','137','138','139','130','103']),'15':toCan(['115','151','511','150','105','015','155','515','551','159']),'23':toCan(['123','232','233','234','235','236','237','238','239','230']),'44':toCan(['144','244','344','440','404','044','448','484','844','445']),'89':toCan(['189','289','389','489','589','689','789','890','809','089'])};
+const FM={'123':toCan(['123','128','137','178','236','268','367','678']),'146':toCan(['146','149','160','169','179','247','269','349','479','368','467','569'])};
+const weeks=[];let sd=new Date('2024-11-08');
+for(let w=0;w<24;w++){let d=new Date(sd);d.setDate(d.getDate()+w*7);let label=d.toISOString().slice(0,10);let row={week:label,days:[]};for(let i=0;i<6;i++){let open,close;if(w===0 && i===5){open=canonical('012');close=canonical('122');}else if(w===1 && i===0){open=canonical('049');close=canonical('126');}else if(w===1 && i===1){open=canonical('123');close=canonical('489');}else {open=randCanonical();close=randCanonical();}let jodi=''+ank(open)+ank(close);row.days.push({open,close,jodi});}weeks.push(row);}
+function shouldRed(cell,q,mode){if(!q) return false;q=q.trim();if(mode==='none') return false;let cq=q.length===3?canonical(q):q;if(mode==='cp'){let list=CP_MAP[q]||[];return list.includes(cell.open)||list.includes(cell.close);}if(mode==='panafamily'){let fam=FM[cq]||[];for(let k in FM){if(FM[k].includes(cq)) fam=FM[k];}return fam.includes(cell.open)||fam.includes(cell.close);}if(mode==='start') return cell.open[0]===q[0]||cell.close[0]===q[0];if(mode==='mid') return cell.open[1]===q[0]||cell.close[1]===q[0];if(mode==='end') return cell.open[2]===q[0]||cell.close[2]===q[0];return false;}
+function render(){const q=document.getElementById('q').value.trim();const hl=document.getElementById('hl').value;const only=document.getElementById('only').checked;const show=document.getElementById('show').value;let filtered=weeks;if(show==='Last 4 weeks') filtered=weeks.slice(-4);if(show==='Last 10 weeks') filtered=weeks.slice(-10);let html='';filtered.forEach(w=>{let tds=[];w.days.forEach(c=>{let cq=q.length===3?canonical(q):q;let isMatch=!q || c.open===cq || c.close===cq || c.open.includes(q) || c.close.includes(q) || c.jodi===q || (CP_MAP[q]&&(CP_MAP[q].includes(c.open)||CP_MAP[q].includes(c.close)));if(only && q && !isMatch) return;let rOpen=shouldRed(c,q,hl);let rClose=shouldRed({open:c.close,close:c.open},q,hl);let rJodi=(q && c.jodi===q);tds.push(`<td><div class="cell3"><div class="col ${rOpen?'red':''}"><span>${c.open[0]}</span><span>${c.open[1]}</span><span>${c.open[2]}</span></div><div class="jodi-col ${rJodi||rOpen||rClose?'red':''}">${c.jodi}</div><div class="col ${rClose?'red':''}"><span>${c.close[0]}</span><span>${c.close[1]}</span><span>${c.close[2]}</span></div></div></td>`);});if(only && tds.length===0) return;if(tds.length>0) html+=`<tr><td class="week">${w.week}<br>to<br>${w.week}</td>${tds.join('')}</tr>`;});document.getElementById('body').innerHTML=html;}
 render();
 </script></body></html>
