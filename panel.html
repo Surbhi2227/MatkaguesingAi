@@ -1,94 +1,57 @@
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KALYAN PANEL CHART - CANONICAL</title>
+<title>KALYAN PANEL CHART - CANONICAL 3-LINE</title>
 <style>
 body{margin:0;font-family:Arial;background:#fff}
-.top{background:#7c1450;color:#fff;display:flex;gap:12px;padding:8px 10px;font-size:14px}
-h1{color:#7c1450;text-align:center;margin:12px 5px 2px;font-size:19px}
-.sub{text-align:center;font-weight:bold;font-size:13px}
+.top{background:#7c1450;color:#fff;display:flex;gap:12px;padding:8px 10px;font-size:14px;overflow:auto}
+h1{color:#7c1450;text-align:center;margin:12px 5px 2px;font-size:19px;line-height:1.2}
+.sub{text-align:center;font-weight:bold;font-size:13px;color:#333}
 .btn{display:block;margin:8px auto;background:#7c1450;color:#fff;border:none;padding:8px 18px;border-radius:6px}
 .filter{background:#111;color:#fff;padding:15px;margin:12px;border-radius:12px}
+.filter b{display:block;margin-bottom:8px}
 .filter input,.filter select{width:100%;padding:10px;border-radius:6px;border:none;margin:6px 0 10px;font-size:15px;box-sizing:border-box}
-.note{background:#fef3c7;color:#000;padding:10px;border-radius:8px;font-size:12px}
+.note{background:#fef3c7;color:#000;padding:10px;border-radius:8px;font-size:12px;margin-top:8px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#7c1450;color:#fff;padding:6px 2px;position:sticky;top:0}
-td{border:1px solid #ccc;padding:4px 1px;text-align:center;min-width:55px;line-height:1.4}
-td.week{background:#f3e8ff;font-weight:bold;min-width:68px;font-size:11px}
-.jodi{color:#7c1450;font-weight:bold;font-size:15px;display:block;margin:2px 0}
-.red{background:#ff0000!important;color:#fff!important;border-radius:4px;padding:2px 4px}
+th{background:#7c1450;color:#fff;padding:6px 2px;position:sticky;top:0;z-index:1}
+td{border:1px solid #ccc;padding:5px 1px;text-align:center;min-width:56px;line-height:1.45}
+td.week{background:#f3e8ff;font-weight:bold;min-width:70px;font-size:11px}
+.jodi{color:#000;font-weight:bold;font-size:15px;display:block;margin:1px 0}
+.pana{display:block}
+.red{background:#ff0000!important;color:#fff!important;border-radius:4px;padding:1px 4px}
 </style></head><body>
-<div class="top"><a>Result</a><a>Charts</a><a>Guessing</a></div>
-<h1>KALYAN PANEL CHART - CANONICAL</h1>
-<div class="sub">3-Digit (canonical) - Jodi - 3-Digit (canonical)</div>
+<div class="top"><a>Result</a><a>Charts</a><a>Guessing</a><a>Forum</a></div>
+<h1>KALYAN PANEL CHART - YOUR INVENTION</h1>
+<div class="sub">CANONICAL: 3-digit OPEN / 2-digit JODI / 3-digit CLOSE<br>Digits sorted ascending</div>
 <div class="filter">
-<b>SEARCH - CP + FAMILY + DIGIT</b>
-<input id="q" value="12" placeholder="12, 123, 1" oninput="render()">
+<b>SEARCH & FILTER - CP + PANA FAMILY + DIGIT POSITION</b>
+<label>Find: CP (11-99), Pana (e.g. 123), Jodi (e.g. 59)</label>
+<input id="q" value="12" placeholder="e.g. 12 , 123 , 59 , 1" oninput="render()">
+<label>Highlight:</label>
 <select id="hl" onchange="render()">
 <option value="none">Nothing</option>
-<option value="cp" selected>CP Pana List (10 per CP)</option>
-<option value="panafamily">Family of Pana (FM-35)</option>
-<option value="start">Pana Start Digit</option>
-<option value="mid">Pana Middle Digit</option>
-<option value="end">Pana End Digit</option>
+<option value="cp" selected>CP Pana List (10 per CP) - RED</option>
+<option value="panafamily">Family of Pana (FM-35) - RED</option>
+<option value="start">Pana Start Digit - RED</option>
+<option value="mid">Pana Middle Digit - RED</option>
+<option value="end">Pana End Digit - RED</option>
 </select>
-<select id="show" onchange="render()"><option>All weeks</option><option>Last 4 weeks</option><option>Last 10 weeks</option></select>
-<div style="margin-top:8px"><input type="checkbox" id="only" onchange="render()" style="width:auto"> Only weeks with match</div>
-<div class="note">V5 CANONICAL FIX: 487->478, 738->378, 832->238. Digits always sorted ascending like original site. Try 12 + CP List = 112,122,123 etc RED</div>
+<div style="display:flex;gap:8px"><select id="show" onchange="render()" style="flex:1"><option>All weeks</option><option>Last 4 weeks</option><option>Last 10 weeks</option></select>
+<label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="only" onchange="render()" style="width:auto;margin:0"> Only match</label></div>
+<div class="note">V6 FINAL: 918→189 (canonical), Jodi is 2-digit (e.g. 59). No more 918/5/487/9 bug. Now 189/59/478 format like original site.</div>
 </div>
 <div style="overflow:auto"><table><thead><tr><th>Week</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody id="body"></tbody></table></div>
+<div id="msg" style="text-align:center;padding:12px;color:#666;font-size:12px"></div>
 <script>
-function canonical(p){ // 487 -> 478, 738 -> 378
-  return p.split('').sort().join('');
-}
-function ank(p){return (parseInt(p[0])+parseInt(p[1])+parseInt(p[2]))%10;}
-function randPana(){
-  let a=Math.floor(Math.random()*10);
-  let b=Math.floor(Math.random()*10);
-  let c=Math.floor(Math.random()*10);
-  if(a===b && b===c) return randPana(); // no triple for random
-  let s=''+a+b+c;
-  return canonical(s);
-}
-// CP MAP - now all canonical sorted
-const CP_MAP_RAW={'11':['112','121','211','110','101','011','119','191','911','118'],'12':['112','122','123','124','125','126','127','128','129','120'],'13':['113','133','134','135','136','137','138','139','130','103']};
-const CP_MAP={};
-for(let k in CP_MAP_RAW){CP_MAP[k]=[...new Set(CP_MAP_RAW[k].map(canonical))];}
-
-const FM_RAW={'123':['123','128','137','178','236','268','367','678'],'146':['146','149','160','169','179','247','269','349','479','368','467','569']};
-const FM={}; for(let k in FM_RAW){FM[canonical(k)]=FM_RAW[k].map(canonical);}
-
+function canonical(p){if(!p) return p;p=p.toString();if(p.length!==3) return p;return p.split('').sort().join('');}
+function ank(p){p=canonical(p);return (parseInt(p[0])+parseInt(p[1])+parseInt(p[2]))%10;}
+function randCanonicalPana(){let a=Math.floor(Math.random()*10);let b=Math.floor(Math.random()*10);let c=Math.floor(Math.random()*10);if(a===b && b===c){if(Math.random()>0.8) return canonical(''+a+b+c);return randCanonicalPana();}return canonical(''+a+b+c);}
+const CP_MAP_RAW={'11':['112','121','211','110','101','011','119','191','911','118'],'12':['112','122','123','124','125','126','127','128','129','120'],'13':['113','133','134','135','136','137','138','139','130','103'],'15':['115','151','511','150','105','015','155','515','551','159'],'23':['123','232','233','234','235','236','237','238','239','230'],'44':['144','244','344','440','404','044','448','484','844','445'],'55':['155','255','355','550','505','055','556','565','655','557'],'89':['189','289','389','489','589','689','789','890','809','089']};
+const CP_MAP={};for(let k in CP_MAP_RAW){CP_MAP[k]=[...new Set(CP_MAP_RAW[k].map(p=>canonical(p)))];}
+const FM_RAW={'123':['123','128','137','178','236','268','367','678'],'146':['146','149','160','169','179','247','269','349','479','368','467','569'],'289':['289','280','235','359','369','479','489','589','579','578']};
+const FM={};for(let k in FM_RAW){let ck=canonical(k);FM[ck]=[...new Set(FM_RAW[k].map(canonical))];}
 const weeks=[];let sd=new Date('2024-11-01');
-for(let w=0;w<30;w++){let d=new Date(sd);d.setDate(d.getDate()+w*7);let row={week:d.toISOString().slice(0,10),days:[]};for(let i=0;i<6;i++){
-let open=(w==2&&i==1)?canonical('123'):(w==3&&i==2)?canonical('128'):(w==5&&i==0)?canonical('112'):randPana();
-let close=randPana();let jodi=''+ank(open)+ank(close);
-row.days.push({open:canonical(open),close:canonical(close),jodi});}weeks.push(row);}
-
-function shouldRed(cell,q,mode){
- if(!q) return false; q=q.trim(); if(mode==='none') return false;
- let cq=canonical(q); if(q.length===3) cq=canonical(q);
- if(mode==='cp'){ let list=CP_MAP[q]||[]; return list.includes(cell.open)||list.includes(cell.close); }
- if(mode==='panafamily'){ let fam=FM[cq]||[]; for(let k in FM){if(FM[k].includes(cq)) fam=FM[k];} return fam.includes(cell.open)||fam.includes(cell.close); }
- if(mode==='start'){ return cell.open[0]===q[0]||cell.close[0]===q[0]; }
- if(mode==='mid'){ return cell.open[1]===q[0]||cell.close[1]===q[0]; }
- if(mode==='end'){ return cell.open[2]===q[0]||cell.close[2]===q[0]; }
- return false;}
-
-function render(){
- const q=document.getElementById('q').value;const hl=document.getElementById('hl').value;const only=document.getElementById('only').checked;const show=document.getElementById('show').value;
- let filtered=weeks;if(show==='Last 4 weeks')filtered=weeks.slice(-4);if(show==='Last 10 weeks')filtered=weeks.slice(-10);
- let html='';filtered.forEach(w=>{
-  let tds=w.days.map(c=>{
-   let cq=q.length===3?canonical(q):q;
-   let isMatch=!q||c.open.includes(q)||c.close.includes(q)||c.jodi===q||c.open===cq||c.close===cq||(CP_MAP[q]&&(CP_MAP[q].includes(c.open)||CP_MAP[q].includes(c.close)));
-   if(only&&q&&!isMatch) return null;
-   let rOpen=shouldRed(c,q,hl);let rClose=shouldRed({open:c.close,close:c.open},q,hl);
-   let rJodi=(q&&c.jodi===q);
-   return `<td><span class="${rOpen?'red':''}">${c.open}</span><span class="jodi ${rJodi?'red':''}">${c.jodi}</span><span class="${rClose?'red':''}">${c.close}</span></td>`;
-  }).filter(x=>x!==null);
-  if(only&&tds.length===0) return;
-  html+=`<tr><td class="week">${w.week}</td>${tds.join('')}</tr>`;
- });
- document.getElementById('body').innerHTML=html;
-}
+for(let w=0;w<32;w++){let d=new Date(sd);d.setDate(d.getDate()+w*7);let row={week:d.toISOString().slice(0,10),days:[]};for(let i=0;i<6;i++){let open,close;if(w===2 && i===1){open=canonical('123'); close=randCanonicalPana();}else if(w===3 && i===2){open=canonical('128'); close=randCanonicalPana();}else if(w===5 && i==0){open=canonical('112'); close=randCanonicalPana();}else {open=randCanonicalPana(); close=randCanonicalPana();}let oa=ank(open);let ca=ank(close);let jodi=''+oa+ca;row.days.push({open,close,jodi,oa,ca});}weeks.push(row);}
+function shouldRed(cell,q,mode){if(!q) return false;q=q.trim();if(!q) return false;if(mode==='none') return false;let cq = q.length===3 ? canonical(q) : q;if(mode==='cp'){let list=CP_MAP[q]||[];return list.includes(cell.open)||list.includes(cell.close);}if(mode==='panafamily'){let fam=FM[cq]||[];for(let k in FM){ if(FM[k].includes(cq)) fam=FM[k];}return fam.includes(cell.open)||fam.includes(cell.close);}if(mode==='start'){return cell.open[0]===q[0]||cell.close[0]===q[0];}if(mode==='mid'){return cell.open[1]===q[0]||cell.close[1]===q[0];}if(mode==='end'){return cell.open[2]===q[0]||cell.close[2]===q[0];}return false;}
+function render(){const q=document.getElementById('q').value.trim();const hl=document.getElementById('hl').value;const only=document.getElementById('only').checked;const show=document.getElementById('show').value;let filtered=weeks;if(show==='Last 4 weeks') filtered=weeks.slice(-4);if(show==='Last 10 weeks') filtered=weeks.slice(-10);let html='';filtered.forEach(w=>{let cells=[];w.days.forEach(c=>{let cq = q.length===3 ? canonical(q) : q;let isMatch = !q || c.open===cq || c.close===cq || c.open.includes(q) || c.close.includes(q) || c.jodi===q || (CP_MAP[q] && (CP_MAP[q].includes(c.open)||CP_MAP[q].includes(c.close)));if(only && q && !isMatch) return;let rOpen=shouldRed(c,q,hl);let rClose=shouldRed({open:c.close,close:c.open},q,hl);let rJodi = (q && c.jodi===q);cells.push(`<td><span class="pana ${rOpen?'red':''}">${c.open}</span><span class="jodi ${rJodi?'red':''}">${c.jodi}</span><span class="pana ${rClose?'red':''}">${c.close}</span></td>`);});if(only && cells.length===0) return;if(cells.length>0) html+=`<tr><td class="week">${w.week}</td>${cells.join('')}</tr>`;});document.getElementById('body').innerHTML=html||`<tr><td colspan="7" style="padding:20px">No match for ${q}. Uncheck Only match.</td></tr>`;document.getElementById('msg').textContent = html ? `Format: ${weeks[0].days[0].open} / ${weeks[0].days[0].jodi} / ${weeks[0].days[0].close} - All canonical sorted` : '';}
 render();
 </script></body></html>
